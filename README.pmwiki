@@ -1,0 +1,97 @@
+﻿>>recipeinfo<<
+Summary:{$Description}
+Version:0.01
+Prerequisites:PmWiki 2.2beta56, may work with earlier versions, but not tested
+Status:beta
+Maintainer:[[~Kathryn Andersen]]
+Categories:[[!FPL]] [[!Searching]]
+File:Attach:fauxtrail.php
+(:if exists [[{$Name}-Talk]]:)Discussion: [[{$Name}-Talk]](:if:)
+>><<
+!! Questions answered by this recipe
+
+How can I get page listings to behave like a trail?
+
+!!Description
+(:Description Enable page listings to have a "trail-like" format via fmt=fauxtrail:){$Description}
+
+This recipe creates a few different trail-like pagelist formats.
+
+They all basically look like this:
+
+[=<< [[PrevPage|{PrevPage$Title}]] | [[Index Page]] | [[NextPage|{NextPage$Title}]] >>=]
+
+The main difference in the different formats is what page is used as the "index" page of the faux-trail.
+
+Because these are PHP-function formats rather than pagelist templates means that they are more efficient, and thus faster.
+
+!!!Activation
+
+To activate this recipe, download Attach:fauxtrail.php and put it into your cookbook directory.
+Add the following line to your local/config.php:
+
+[@
+include_once("$FarmD/cookbook/fauxtrail.php");
+@]
+
+!!!fmt=grouptrail
+
+The grouptrail format makes a "trail" of pages in a group.  The "index" page for this faux-trail is the home-page of the current group.  This uses the special search-pattern "content" because the "normal" search-pattern excludes the current page, and these trail formats won't work if the current page is excluded.
+
+(:markup:)
+(:pagelist group={$Group} name=-{$Group} list=content order=name fmt=grouptrail:)
+(:markupend:)
+
+!!!fmt=fauxtrail
+
+The fauxtrail format is the general form of the format.  This takes extra options, so that you can customize it to your preference.
+
+:trailpage:the page to use as the "index" page for the faux-trail
+:label:the label to give the "index" page
+
+The following gives the same results as grouptrail:
+(:markup:)
+(:pagelist group={$Group} name=-{$Group} list=content order=name fmt=fauxtrail trailpage={$Group} label={$Group}:)
+(:markupend:)
+
+Note that if the current page isn't part of the faux-trail, then the pagelist will give no results.  (This is a feature, not a bug).
+
+(:markup:)
+(:pagelist group=Main list=content order=name fmt=fauxtrail trailpage=Main label=Home:)
+(:markupend:)
+
+The fauxtrail markup is useful for more specialized trails; for example, a trail of everything in the same category.
+
+(:markup:)
+(:pagelist group={$Group} link=Category.FPL list=content order=name fmt=fauxtrail trailpage=Category.FPL label="Pagelist Formats":)
+(:markupend:)
+
+!!!fmt=trailtrail
+
+The trailtrail format is slightly different.  This looks for all the normal trails that the current page is part of, and displays the trails (as fauxtrail markup).
+If the current page isn't part of any trail, then nothing will be displayed.
+
+(:markup:)
+(:pagelist list=content fmt=trailtrail:)
+(:markupend:)
+
+!! Notes
+
+
+!! Release Notes
+* 0.01 (2007-06-17) Initial release.
+
+!! Comments
+(:if false:)
+This space is for User-contributed commentary and notes.
+Please include your name and a date along with your comment.
+Optional alternative:  create a new page with a name like "ThisRecipe-Talk" (e.g. PmCalendar-Talk).
+(:if exists [[{$Name}-Talk]]:)See Discussion at [[{$Name}-Talk]](:if:)
+
+!! See Also
+
+* [[DictIndex]]
+* [[FplByDays]]
+
+!! Contributors
+
